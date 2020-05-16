@@ -194,73 +194,62 @@ int messageCounter = 0;
 int proposedID1 = 0;
 int proposedID2 = 0;
 
-
 // Generates a new ID each time during the execution of the algorithm.
-// Proposer 0 generates only even IDs when proposer 1 generates only odd IDs.
 void PrepareProposedID(int id){
+    int i;
     if(id == 0){
-        if(Nodes[0].paxosID != -1 &amp;&amp; proposedID1 &lt; Nodes[0].paxosID){
-            proposedID1 = Nodes[0].paxosID;
-        }
-        proposedID1 = proposedID1 + 1;
-        if(proposedID1 % 2 != 0){
-            proposedID1 = proposedID1 + 1;
-            currentProposedID[id] = proposedID1;
+        if(currentProposedID[0] &gt; currentProposedID[1]){
+            proposedID1 = currentProposedID[0] + 1;
         }else{
-            currentProposedID[id] = proposedID1;
+            proposedID1 = currentProposedID[1] + 1;
         }
+        currentProposedID[id] = proposedID1;        
     }
 
-    if(id == 1){
-        if(Nodes[1].paxosID != -1 &amp;&amp; proposedID2 &lt; Nodes[1].paxosID){
-            proposedID2 = Nodes[1].paxosID;
-        }
-        proposedID2 = proposedID2 + 1;
-        if(proposedID2 % 2 == 0){
-            proposedID2 = proposedID2 + 1;
-            currentProposedID[id] = proposedID2;
+    if(id == 1){       
+        if(currentProposedID[0] &gt; currentProposedID[1]){
+            proposedID2 = currentProposedID[0] + 1;
         }else{
-            currentProposedID[id] = proposedID2;
+            proposedID2 = currentProposedID[1] + 1;
         }
-
+        currentProposedID[id] = proposedID2;
     }
 
 }
-
 </declaration>
 		<location id="id5" x="-136" y="-76">
 			<name x="-146" y="-110">Start</name>
-			<label kind="exponentialrate" x="-146" y="-42">0.5</label>
+			<label kind="exponentialrate" x="-146" y="-42">2.5</label>
 		</location>
 		<location id="id6" x="59" y="-76">
 			<name x="49" y="-110">Acceptor0</name>
-			<label kind="exponentialrate" x="49" y="-42">1.5</label>
+			<label kind="exponentialrate" x="49" y="-42">2.5</label>
 		</location>
 		<location id="id7" x="263" y="-76">
 			<name x="253" y="-110">Acceptor1</name>
-			<label kind="exponentialrate" x="253" y="-42">1.5</label>
+			<label kind="exponentialrate" x="253" y="-42">2.5</label>
 		</location>
 		<location id="id8" x="510" y="-76">
 			<name x="500" y="-110">Acceptor2</name>
-			<label kind="exponentialrate" x="500" y="-42">1.5</label>
+			<label kind="exponentialrate" x="500" y="-42">2.5</label>
 		</location>
 		<location id="id9" x="-365" y="-76">
 		</location>
 		<location id="id10" x="739" y="-76">
 			<name x="729" y="-110">Pivot</name>
-			<label kind="exponentialrate" x="729" y="-42">0.4</label>
+			<label kind="exponentialrate" x="729" y="-42">2.5</label>
 		</location>
 		<location id="id11" x="739" y="-255">
 			<name x="729" y="-289">Acceptor_0</name>
-			<label kind="exponentialrate" x="729" y="-221">0.4</label>
+			<label kind="exponentialrate" x="729" y="-221">2.5</label>
 		</location>
 		<location id="id12" x="510" y="-255">
 			<name x="500" y="-289">Acceptor_1</name>
-			<label kind="exponentialrate" x="500" y="-221">0.5</label>
+			<label kind="exponentialrate" x="500" y="-221">2.5</label>
 		</location>
 		<location id="id13" x="263" y="-255">
 			<name x="253" y="-289">Acceptor_2</name>
-			<label kind="exponentialrate" x="253" y="-221">0.9</label>
+			<label kind="exponentialrate" x="253" y="-221">2.5</label>
 		</location>
 		<init ref="id5"/>
 		<transition>
@@ -356,7 +345,11 @@ system Proposer0, Proposer1, Acceptor0, Acceptor1, Acceptor2;
 </comment>
 		</query>
 		<query>
-			<formula>Pr[&lt;=6; 85000](&lt;&gt; (Nodes[2].value == 4 &amp;&amp; Nodes[3].value == 4 &amp;&amp; Nodes[4].value == 4))</formula>
+			<formula>Pr[&lt;=5; 20000](&lt;&gt; (Nodes[2].value == 4 &amp;&amp; Nodes[3].value == 4 &amp;&amp; Nodes[4].value == 4))</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;(currentProposedID[0] &gt; 25)</formula>
 			<comment></comment>
 		</query>
 		<query>
